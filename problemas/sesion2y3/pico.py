@@ -23,7 +23,7 @@ def process (data:Data) -> Result:
             start = mid
         else:
             end = mid
-    return data[start]
+    return start
 
 def show_result (result: Result):
     print(result)
