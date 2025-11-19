@@ -61,8 +61,8 @@ def show_results(result: Result):
 
 if __name__ == "__main__":
     # process = process_mq
-    process = process_pqq
-    # process = process_pqqo
+    #process = process_pqq
+    process = process_pqqo
 
     data0 = read_data(sys.stdin)
     result0 = process(data0)
