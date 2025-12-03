@@ -26,15 +26,64 @@ def read_data(f: TextIO) -> Data:
 
 
 def process_direct(data: Data) -> Result:
-    raise NotImplementedError
+    def S(q, n):
+        if n == 0 and q == 0:
+            return 0
+        if n == 0 and q > 0:
+            return infinity
+
+        g = (S(q - d * v[n - 1], n - 1) + d * w[n - 1] for d in range(min(m[n - 1], q // v[n -1] + 1)))
+        return min(g, default=infinity)
+
+
+    N, Q, v, w, m = data
+    score = S(Q, N)
+    return score, None
 
 
 def process_memo(data: Data) -> Result:
-    raise NotImplementedError
+    def S(q, n):
+        if n == 0 and q == 0:
+            return 0
+        if n == 0 and q > 0:
+            return infinity
 
+        if(q, n) not in mem:
+            g = (S(q - d * v[n - 1], n - 1) + d * w[n - 1] for d in range(min(m[n - 1], q // v[n - 1] + 1)))
+            mem[q, n] = min(g,default=infinity)
+        return mem[q, n][0]
+
+    N, Q, v, w, m = data
+    mem: MemSolution = {}
+    score = S(Q, N)
+    return score, None
 
 def process_memo_solution(data: Data) -> Result:
-    raise NotImplementedError
+    def S(q, n):
+        if n == 0 and q == 0:
+            return 0
+        if n == 0 and q > 0:
+            return infinity
+
+        if (q, n) not in mem:
+            g = (S(q - d * v[n - 1], n - 1) + d * w[n - 1] for d in range(min(m[n - 1], q // v[n - 1] + 1)))
+            mem[q, n] = min(g, default=infinity)
+        return mem[q, n][0]
+
+    N, Q, v, w, m = data
+    mem: MemSolution = {}
+    score = S(Q, N)
+    if score == infinity:
+        return None
+    decisions = []
+    q,n = Q, N
+    while n > 0:
+        _, d = mem[q, n]
+        decisions.append(d)
+        q = q -d * v[n - 1]
+        n = n - 1
+    decisions.reverse()
+    return score, decisions
 
 
 def process_iter(data: Data) -> Result:
